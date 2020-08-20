@@ -23,14 +23,6 @@ class PublishVideoServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            $this->commands([
-                InstallCommand::class,
-                UninstallCommand::class,
-                UpgradeCommand::class
-            ]);
-        }
-
         $this->loadRoutesFrom(__DIR__ . '/../routes.php');
 
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'publishVideo');
