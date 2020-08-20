@@ -54,7 +54,8 @@ class InstallCommand extends Command
     // 是否安装过
     protected function installed()
     {
+        $plugin = new Plugin();
         // 验证表是否存在
-        return class_exists('Qihucms\\PublishVideo\\PublishVideoServiceProvider');
+        return class_exists('Qihucms\\PublishVideo\\PublishVideoServiceProvider') && $plugin->getPluginVersion('publish-video') == 100;
     }
 }
