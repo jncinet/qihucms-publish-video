@@ -54,9 +54,9 @@ class ConfigForm extends Form
     public function data()
     {
         return [
-            'ffmpeg_video_width' => Cache::get('ffmpeg_video_width'),
-            'ffmpeg_video_height' => Cache::get('ffmpeg_video_height'),
-            'ffmpeg_input_duration' => Cache::get('ffmpeg_input_duration'),
+            'ffmpeg_video_width' => Cache::get('ffmpeg_video_width', 544),
+            'ffmpeg_video_height' => Cache::get('ffmpeg_video_height', 960),
+            'ffmpeg_input_duration' => Cache::get('ffmpeg_input_duration', 0),
         ];
     }
 }
