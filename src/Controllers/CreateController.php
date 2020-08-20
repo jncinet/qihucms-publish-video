@@ -45,7 +45,7 @@ class CreateController extends Controller
             $data['city'] = isset($adInfo['result']['ad_info']) ? $adInfo['result']['province'] . ' ' . $adInfo['result']['city'] : '未知位置';
         }
         // 转码压缩
-        if (empty($data['src']) || !Storage::exists($data['src'])) {
+        if (empty($data['src'])) {
             return $this->errorJson('视频不存在');
         } else {
             // 转码压缩
