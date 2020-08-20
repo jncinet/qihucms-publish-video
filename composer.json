@@ -1,0 +1,33 @@
+{
+  "name": "jncinet/qihucms-publish-video",
+  "description": "qihucms video publish.",
+  "keywords": [
+    "laravel",
+    "qihucms",
+    "publish"
+  ],
+  "homepage": "https://www.qihucms.com",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zhangye",
+      "email": "y@qilephp.com"
+    }
+  ],
+  "require": {
+    "jncinet/laravel-video-ffmpeg": "^1.0",
+    "jncinet/tencent_lbs":  "^1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Qihucms\\PublishVideo\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Qihucms\\PublishVideo\\PublishVideoServiceProvider"
+      ]
+    }
+  }
+}
