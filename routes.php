@@ -3,7 +3,7 @@
 use Illuminate\Routing\Router;
 
 Route::group([
-    // 公会页面URL前缀
+    // 页面URL前缀
     'prefix' => 'publish-video',
     // 控制器命名空间
     'namespace' => 'Qihucms\PublishVideo\Controllers',
