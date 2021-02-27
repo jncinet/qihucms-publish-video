@@ -114,8 +114,7 @@
                         <div class="weui-cell__bd"><label class="weui-label">位置</label></div>
                         <div class="weui-cell__bd">
                             <input name="city" style="text-align: right;color:#999999" class="weui-input" type="text"
-                                   id="city"
-                                   placeholder="我的位置">
+                                   id="city" placeholder="我的位置">
                         </div>
                     </div>
 
@@ -252,37 +251,47 @@
         function receiveAppLocation(data) {
             //城市：data.city,
             //省份：data.province
-            $('#city').val(data.province + ' ' + data.city);
+            const city = data.province + ' ' + data.city;
+            sessionStorage.setItem('userCity', city);
+            $('#city').val(city);
             $("#city").cityPicker({showDistrict: false});
         }
 
-        wx.config( {!! $weChatJsSdk !!} );
-        var weChatGps = undefined;
-        wx.ready(function () {
-            wx.getLocation({
-                type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
-                success: function (res) {
-                    axios.get("{{ route('publish-video.location') }}", {
-                        params: {
-                            type: 'gps',
-                            latitude: res.latitude,
-                            longitude: res.longitude
-                        }
-                    })
-                        .then(function (response) {
-                            if (response.data.status === 0) {
-                                $('#city').val(response.data.result.address_component.province + ' ' + response.data.result.address_component.city);
-                                weChatGps = true;
-                                $("#city").cityPicker({showDistrict: false});
+        document.addEventListener("DOMContentLoaded", function () {
+            const userCity = sessionStorage.getItem('userCity');
+            if (userCity !== null && userCity.length > 0) {
+                $('#city').val(userCity);
+                return;
+            }
+            wx.config( {!! $weChatJsSdk !!} );
+            var weChatGps = undefined;
+            wx.ready(function () {
+                wx.getLocation({
+                    type: 'wgs84', // 默认为wgs84的gps坐标，如果要返回直接给openLocation用的火星坐标，可传入'gcj02'
+                    success: function (res) {
+                        axios.get("{{ route('publish-video.location') }}", {
+                            params: {
+                                type: 'gps',
+                                latitude: res.latitude,
+                                longitude: res.longitude
                             }
                         })
-                        .catch(function (error) {
-                        });
-                }
+                            .then(function (response) {
+                                if (response.data.status === 0) {
+                                    const city = response.data.result.address_component.province + ' ' + response.data.result.address_component.city;
+                                    sessionStorage.setItem('userCity', city);
+                                    $('#city').val(city);
+                                    weChatGps = true;
+                                    $("#city").cityPicker({showDistrict: false});
+                                }
+                            })
+                            .catch(function (error) {
+                            });
+                    }
+                });
             });
-        });
-        if (weChatGps !== true) {
-            setTimeout(function () {
+
+            if (weChatGps !== true) {
                 if (window.Qihu) {
                     window.Qihu.location('receiveAppLocation');
                 } else {
@@ -293,15 +302,22 @@
                     })
                         .then(function (res) {
                             if (res.data.status === 0) {
-                                $('#city').val(res.data.result.ad_info.province + ' ' + res.data.result.ad_info.city);
-                                $("#city").cityPicker({showDistrict: false});
+                                let city = res.data.result.ad_info.province;
+                                if (res.data.result.ad_info.adcode > 0) {
+                                    city += ' ' + res.data.result.ad_info.city;
+                                }
+                                if (city.length > 1) {
+                                    sessionStorage.setItem('userCity', city);
+                                    $('#city').val(city);
+                                    $("#city").cityPicker({showDistrict: false});
+                                }
                             }
                         })
                         .catch(function (err) {
                             console.log(err.response);
                         });
                 }
-            }, 1000);
-        }
+            }
+        });
     </script>
 @endpush

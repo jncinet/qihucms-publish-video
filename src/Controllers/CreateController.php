@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: zhangye
- * Date: 2020/8/19
- * Time: 2:52 PM
- */
 
 namespace Qihucms\PublishVideo\Controllers;
 
@@ -42,7 +36,7 @@ class CreateController extends Controller
         if (empty($data['city'])) {
             $lbs = new TencentLbs();
             $adInfo = $lbs->ipLocation($request->ip());
-            $data['city'] = isset($adInfo['result']['ad_info']) ? $adInfo['result']['province'] . ' ' . $adInfo['result']['city'] : '未知位置';
+            $data['city'] = isset($adInfo['result']['ad_info']) ? $adInfo['result']['ad_info']['province'] . ' ' . $adInfo['result']['ad_info']['city'] : '未知位置';
         }
         // 转码压缩
         if (empty($data['src'])) {
